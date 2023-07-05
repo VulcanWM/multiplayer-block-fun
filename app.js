@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 const all_joinable_ids = []
 
 app.get('/', (req, res) => {
-    res.render("home")
+    res.render("home", {all_ids: all_joinable_ids})
 });
 
 app.get('/host', (req, res) => {
@@ -83,8 +83,8 @@ io.on('connection', (socket) => {
     socket.on('user joined', (user, game_id) => {
         io.emit('user joined', user, game_id);
     });
-    socket.on('game started', (game_id) => {
-        io.emit('game started', game_id)
+    socket.on('game generated' , (game_id) => {
+        io.emit('game generated', game_id)
     })
 });
 

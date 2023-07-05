@@ -8,9 +8,9 @@
   <body>
     <h1>GAME <%= game_id %></h1>
     <h3><%= nickname %></h3>
-    <div id="content">
-      <p>Canvas</p>
-    </div>
+    <canvas id="canvas" width="500" height="500" style="border:1px solid #000000;">
+      Your browser does not support the HTML canvas tag.
+    </canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();

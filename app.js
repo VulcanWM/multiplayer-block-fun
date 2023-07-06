@@ -80,8 +80,8 @@ app.get('/play', (req, res) => {
 
 
 io.on('connection', (socket) => {
-    socket.on('user joined', (user, game_id) => {
-        io.emit('user joined', user, game_id);
+    socket.on('user joined', (user, game_id, x_cord, y_cord) => {
+        io.emit('user joined', user, game_id, x_cord, y_cord);
     });
     socket.on('game generated' , (game_id) => {
         io.emit('game generated', game_id)

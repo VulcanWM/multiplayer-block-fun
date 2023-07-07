@@ -94,6 +94,7 @@
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
       socket.on('user joined', function(username, game_id, x_cord, y_cord) {
         if (game_id == "<%= game_id %>"){
+          if (x_cord != null && y_cord != null){
             const icon = document.createElement("div")
             icon.id = username
             icon.style.background = "red";
@@ -102,6 +103,7 @@
             icon.classList.add("icon")
             canvas.appendChild(icon)
           }
+        }
       })
       socket.on('movement', function(username, game_id, x_cord, y_cord) {
         if (game_id == "<%= game_id %>"){

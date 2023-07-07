@@ -40,24 +40,36 @@
             // up arrow
             if (parseInt(user_icon.style.top.replace("px", "")) > 0){
               user_icon.style.top = (parseInt(user_icon.style.top.replace("px", "")) - 10) + "px";
+              let x_cord = parseInt(user_icon.style.left.replace("px", ""))
+              let y_cord = parseInt(user_icon.style.top.replace("px", ""))
+              socket.emit("movement", "<%= nickname %>", "<%= game_id %>", x_cord, y_cord)
             }
           }
           else if (e.keyCode == '40') {
             // down arrow
             if (parseInt(user_icon.style.top.replace("px", "")) < 500){
               user_icon.style.top = (parseInt(user_icon.style.top.replace("px", "")) + 10) + "px";
+              let x_cord = parseInt(user_icon.style.left.replace("px", ""))
+              let y_cord = parseInt(user_icon.style.top.replace("px", ""))
+              socket.emit("movement", "<%= nickname %>", "<%= game_id %>", x_cord, y_cord)
             }
           }
           else if (e.keyCode == '37') {
             // left arrow
             if (parseInt(user_icon.style.left.replace("px", "")) > 0){
               user_icon.style.left = (parseInt(user_icon.style.left.replace("px", "")) - 10) + "px";
+              let x_cord = parseInt(user_icon.style.left.replace("px", ""))
+              let y_cord = parseInt(user_icon.style.top.replace("px", ""))
+              socket.emit("movement", "<%= nickname %>", "<%= game_id %>", x_cord, y_cord)
             }
           }
           else if (e.keyCode == '39') {
             // right arrow
             if (parseInt(user_icon.style.left.replace("px", "")) < 500){
               user_icon.style.left = (parseInt(user_icon.style.left.replace("px", "")) + 10) + "px";
+              let x_cord = parseInt(user_icon.style.left.replace("px", ""))
+              let y_cord = parseInt(user_icon.style.top.replace("px", ""))
+              socket.emit("movement", "<%= nickname %>", "<%= game_id %>", x_cord, y_cord)
             }
           }
       }
@@ -66,29 +78,36 @@
       const canvas = document.getElementById("canvas");
       const randomX = Math.round((Math.random() * 475)/10) * 10;
       const randomY = Math.round((Math.random() * 475)/10) * 10;
-      var user_info = "<%= user_info %>"
-      user_info = user_info.replace("&#34;", "'")
-      user_info = JSON.parse(user_info)
-      console.log(user_info)
-      for (user of Object.keys(user_info)){
-        const icon = document.createElement("div")
-        icon.id = user
-        icon.style.background = "red";
-        icon.style.top = user_info[user][0] + "px";
-        icon.style.left = user_info[user][1] + "px";
-        icon.classList.add("icon")
-        canvas.appendChild(icon)
-      }
+      // var user_info = "<%= user_info %>"
+      // user_info = user_info.replace("&#34;", "'")
+      // user_info = JSON.parse(user_info)
+      // console.log(user_info)
+      // for (user of Object.keys(user_info)){
+      //   const icon = document.createElement("div")
+      //   icon.id = user
+      //   icon.style.background = "red";
+      //   icon.style.left = user_info[user][0] + "px";
+      //   icon.style.top = user_info[user][1] + "px";
+      //   icon.classList.add("icon")
+      //   canvas.appendChild(icon)
+      // }
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
       socket.on('user joined', function(username, game_id, x_cord, y_cord) {
-          if (game_id == "<%= game_id %>"){
+        if (game_id == "<%= game_id %>"){
             const icon = document.createElement("div")
             icon.id = username
             icon.style.background = "red";
-            icon.style.top = x_cord + "px";
-            icon.style.left = y_cord + "px";
+            icon.style.left = x_cord + "px";
+            icon.style.top = y_cord + "px";
             icon.classList.add("icon")
             canvas.appendChild(icon)
+          }
+      })
+      socket.on('movement', function(username, game_id, x_cord, y_cord) {
+        if (game_id == "<%= game_id %>"){
+            const icon = document.getElementById(username)
+            icon.style.left = x_cord + "px";
+            icon.style.top = y_cord + "px";
           }
       })
     </script>

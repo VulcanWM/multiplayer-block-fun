@@ -74,7 +74,7 @@ app.get('/play', (req, res) => {
             res.redirect("/join/" + game_id)
         } else {
             const str_user_info = JSON.stringify(user_info[game_id])
-            console.log(str_user_info)
+            // console.log(str_user_info)
             res.render("play", {game_id: game_id, nickname: nickname, user_info:str_user_info});
         }
     } else{
@@ -91,6 +91,10 @@ io.on('connection', (socket) => {
     socket.on('game generated' , (game_id) => {
         user_info[game_id] = []
         io.emit('game generated', game_id)
+    })
+    socket.on('movement', (user, game_id, x_cord, y_cord) => {
+        user_info[game_id][user] = [x_cord, y_cord]
+        io.emit('movement', user, game_id, x_cord, y_cord)
     })
 });
 

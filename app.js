@@ -59,7 +59,6 @@ app.post('/join/:game_id', (req, res) => {
     if (all_joinable_ids.includes(game_id)){
         req.session.game_id = game_id
         req.session.nickname = nickname;
-        io.emit('user joined', nickname, game_id);
         res.redirect("/play")
     } else{
         res.redirect("/")

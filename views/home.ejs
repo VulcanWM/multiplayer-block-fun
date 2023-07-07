@@ -22,7 +22,6 @@
         const br = document.createElement("br")
         document.getElementById("all_games").appendChild(br)
       })
-      console.log(("<%= all_ids %>".split(",")))
       for (game_id of ("<%= all_ids %>".split(","))) {
         if (game_id != ""){
           const a = document.createElement("a");

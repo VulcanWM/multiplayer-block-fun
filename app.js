@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.set("view engine", "ejs");
 
 const all_joinable_ids = []
+const user_info = {}
+// user_info = {"game_id": {"username": [x_cord, y_cord]}}
 
 app.get('/', (req, res) => {
     res.render("home", {all_ids: all_joinable_ids})
@@ -71,7 +73,9 @@ app.get('/play', (req, res) => {
         if (nickname == undefined){
             res.redirect("/join/" + game_id)
         } else {
-            res.render("play", {game_id: game_id, nickname: nickname});
+            const str_user_info = JSON.stringify(user_info[game_id])
+            console.log(str_user_info)
+            res.render("play", {game_id: game_id, nickname: nickname, user_info:str_user_info});
         }
     } else{
         res.redirect("/")
@@ -81,9 +85,11 @@ app.get('/play', (req, res) => {
 
 io.on('connection', (socket) => {
     socket.on('user joined', (user, game_id, x_cord, y_cord) => {
+        user_info[game_id][user] = [x_cord, y_cord]
         io.emit('user joined', user, game_id, x_cord, y_cord);
     });
     socket.on('game generated' , (game_id) => {
+        user_info[game_id] = []
         io.emit('game generated', game_id)
     })
 });

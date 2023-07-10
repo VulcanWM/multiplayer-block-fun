@@ -99,10 +99,10 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', function(){
         if (Object.keys(user_ids).includes(socket.id)){
-            let username = user_ids[socket.id]['username']
-            let game_id = user_ids[socket.id]['game_id']
-            io.emit("user left", username, game_id)
-            // remove from user_info too
+            let username = user_ids[socket.id]['username'];
+            let game_id = user_ids[socket.id]['game_id'];
+            io.emit("user left", username, game_id);
+            delete user_info[game_id][username];
             delete user_ids[socket.id];
         }
     });

@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 
 const all_joinable_ids = []
 const user_info = {}
+const user_ids = {}
 // user_info = {"game_id": {"username": [x_cord, y_cord]}}
 
 app.get('/', (req, res) => {
@@ -83,16 +84,28 @@ app.get('/play', (req, res) => {
 io.on('connection', (socket) => {
     socket.on('user joined', (user, game_id, x_cord, y_cord) => {
         user_info[game_id][user] = [x_cord, y_cord]
+        // user_ids[game_id][socket.id] = user;
+        user_ids[socket.id] = {"game_id": game_id, "username": user}
         io.emit('user joined', user, game_id, x_cord, y_cord);
     });
     socket.on('game generated' , (game_id) => {
         user_info[game_id] = {}
+        // user_ids[game_id] = {}
         io.emit('game generated', game_id)
     })
     socket.on('movement', (user, game_id, x_cord, y_cord) => {
         user_info[game_id][user] = [x_cord, y_cord]
         io.emit('movement', user, game_id, x_cord, y_cord)
     })
+    socket.on('disconnect', function(){
+        if (Object.keys(user_ids).includes(socket.id)){
+            let username = user_ids[socket.id]['username']
+            let game_id = user_ids[socket.id]['game_id']
+            io.emit("user left", username, game_id)
+            // remove from user_info too
+            delete user_ids[socket.id];
+        }
+    });
 });
 
 server.listen(3000, () => {

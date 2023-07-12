@@ -134,6 +134,12 @@
       }
 
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
+      if (all_users.length == 3){
+        const wolf_users = all_users
+        all_users.push("<%= nickname %>")
+        var wolf = wolf_users[Math.floor(Math.random()*wolf_users.length)];
+        socket.emit("made wolf", wolf, "<%= game_id %>")
+      }
       socket.on('user joined', function(username, game_id, x_cord, y_cord, user_id) {
         if (game_id == "<%= game_id %>"){
           if (x_cord != null && y_cord != null){
@@ -168,6 +174,11 @@
         if (game_id == "<%= game_id %>"){
             document.getElementById(username).remove();
           }
+      })
+      socket.on('made wolf', function(wolf, game_id) {
+        if (game_id == "<%= game_id %>"){
+          document.getElementById(wolf).style.background = "green";
+        }
       })
     </script>
   </body>

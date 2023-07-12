@@ -9,7 +9,14 @@
     <h1>GAME <%= game_id %></h1>
     <h3><%= nickname %></h3>
     <div id="canvas">
+
     </div>
+    <table id="key">
+      <tr>
+        <th>UserID</th>
+        <th>Username</th>
+      </tr>
+    </table>
     <style>
       #canvas {
         width:500px;
@@ -34,7 +41,6 @@
       // icon movement
       document.onkeydown = checkKey;
       function checkKey(e) {
-          console.log("keydown")
           e = e || window.event;
           console.log(e.keyCode)
           user_icon = document.getElementById("<%= nickname %>")
@@ -78,6 +84,7 @@
 
       // generating all icons
       const canvas = document.getElementById("canvas");
+      const key = document.getElementById("key")
       const randomX = Math.round((Math.random() * 475)/10) * 10;
       const randomY = Math.round((Math.random() * 475)/10) * 10;
       var user_info = "<%= user_info %>"
@@ -90,8 +97,16 @@
         icon.style.left = user_info[user][0] + "px";
         icon.style.top = user_info[user][1] + "px";
         icon.classList.add("icon")
-        icon.innerText = Object.keys(user_info).indexOf(user)
+        icon.innerText = (Object.keys(user_info).indexOf(user)+1)
         canvas.appendChild(icon)
+        const tr = document.createElement("tr")
+        const td_1 = document.createElement("td")
+        td_1.innerText = (Object.keys(user_info).indexOf(user)+1)
+        tr.appendChild(td_1)
+        const td_2 = document.createElement("td")
+        td_2.innerText = user;
+        tr.appendChild(td_2)
+        key.appendChild(tr)
       }
 
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
@@ -106,6 +121,14 @@
             icon.classList.add("icon")
             icon.innerText = user_id;
             canvas.appendChild(icon)
+            const tr = document.createElement("tr")
+            const td_1 = document.createElement("td")
+            td_1.innerText = user_id
+            tr.appendChild(td_1)
+            const td_2 = document.createElement("td")
+            td_2.innerText = username;
+            tr.appendChild(td_2)
+            key.appendChild(tr)
           }
         }
       })

@@ -99,6 +99,9 @@ io.on('connection', (socket) => {
     socket.on('made wolf', (wolf, game_id) => {
         io.emit('made wolf', wolf, game_id)
     })
+    socket.on('not made wolf', (wolf, game_id) => {
+        io.emit('not made wolf', wolf, game_id)
+    })
     socket.on('disconnect', function(){
         if (Object.keys(user_ids).includes(socket.id)){
             let username = user_ids[socket.id]['username'];

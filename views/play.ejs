@@ -35,14 +35,26 @@
     </style>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
+    function elementsOverlap(el1, el2) {
+      const domRect1 = el1.getBoundingClientRect();
+      const domRect2 = el2.getBoundingClientRect();
+
+      return !(
+        domRect1.top > domRect2.bottom ||
+        domRect1.right < domRect2.left ||
+        domRect1.bottom < domRect2.top ||
+        domRect1.left > domRect2.right
+      );
+    }
       // declaring socket
       var socket = io();
+      const all_users = []
 
       // icon movement
       document.onkeydown = checkKey;
       function checkKey(e) {
           e = e || window.event;
-          console.log(e.keyCode)
           user_icon = document.getElementById("<%= nickname %>")
           if (e.keyCode == '38') {
             // up arrow
@@ -79,6 +91,17 @@
               let y_cord = parseInt(user_icon.style.top.replace("px", ""))
               socket.emit("movement", "<%= nickname %>", "<%= game_id %>", x_cord, y_cord)
             }
+          } 
+          else if (e.key == 'Space' || e.keyCode == 32) {
+            for (user of all_users) {
+              if (user != "<%= nickname %>"){
+                const other_user_icon = document.getElementById(user)
+                let touching = elementsOverlap(user_icon, other_user_icon)
+                if (touching){
+                  alert("You and " + user + " are touching")
+                }
+              }
+            }
           }
       }
 
@@ -107,6 +130,7 @@
         td_2.innerText = user;
         tr.appendChild(td_2)
         key.appendChild(tr)
+        all_users.push(user)
       }
 
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
@@ -129,6 +153,7 @@
             td_2.innerText = username;
             tr.appendChild(td_2)
             key.appendChild(tr)
+            all_users.push(username)
           }
         }
       })

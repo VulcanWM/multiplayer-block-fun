@@ -84,13 +84,12 @@ app.get('/play', (req, res) => {
 io.on('connection', (socket) => {
     socket.on('user joined', (user, game_id, x_cord, y_cord) => {
         user_info[game_id][user] = [x_cord, y_cord]
-        // user_ids[game_id][socket.id] = user;
         user_ids[socket.id] = {"game_id": game_id, "username": user}
-        io.emit('user joined', user, game_id, x_cord, y_cord);
+        let user_id = Object.keys(user_info[game_id]).length
+        io.emit('user joined', user, game_id, x_cord, y_cord, user_id);
     });
     socket.on('game generated' , (game_id) => {
         user_info[game_id] = {}
-        // user_ids[game_id] = {}
         io.emit('game generated', game_id)
     })
     socket.on('movement', (user, game_id, x_cord, y_cord) => {

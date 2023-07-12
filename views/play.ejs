@@ -88,12 +88,12 @@
         icon.style.left = user_info[user][0] + "px";
         icon.style.top = user_info[user][1] + "px";
         icon.classList.add("icon")
-        icon.innerText = user;
+        icon.innerText = Object.keys(user_info).indexOf(user)
         canvas.appendChild(icon)
       }
 
       socket.emit("user joined", "<%= nickname %>", "<%= game_id %>", randomX, randomY)
-      socket.on('user joined', function(username, game_id, x_cord, y_cord) {
+      socket.on('user joined', function(username, game_id, x_cord, y_cord, user_id) {
         if (game_id == "<%= game_id %>"){
           if (x_cord != null && y_cord != null){
             const icon = document.createElement("div")
@@ -102,7 +102,7 @@
             icon.style.left = x_cord + "px";
             icon.style.top = y_cord + "px";
             icon.classList.add("icon")
-            icon.innerText = username;
+            icon.innerText = user_id;
             canvas.appendChild(icon)
           }
         }
